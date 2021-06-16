@@ -35,8 +35,8 @@ def load_program(ui, program_file):
             continue
         # Get x and y values and convert to numeric:
         try:
-            x_val = units_to_value(ui, convert_numeric(line_vals[0]))
-            y_val = units_to_value(ui, convert_numeric(line_vals[1]))
+            x_val = units_to_value(ui, convert_numeric(line_vals[0]), 'x')
+            y_val = units_to_value(ui, convert_numeric(line_vals[1]), 'y')
         except:
             continue
         # If we get here, values should be valid:
