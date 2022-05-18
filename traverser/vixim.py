@@ -382,7 +382,7 @@ class VixIM(object):
         #   * Set acceleration
         #   * Set deceleration
         #   * Set velocity to 0.5 for moving to 0
-        #   * Go to position 0 (via continuous move)
+        ####   * Go to position 0 (via continuous move)
         #   * Set position to 0
         #   * Set velocity
         start_msgs = [
@@ -394,7 +394,7 @@ class VixIM(object):
             'MC',
             'H-',
             'V0.5',
-            'G',
+            ###'G',
             'W(PA,0)',
             'V{0}'.format(self.vel)
         ]
