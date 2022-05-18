@@ -6,6 +6,7 @@ Motion control functions
 # Standard lib imports:
 import time
 # Package imports:
+from traverser.ui_functions.status_functions import units_to_value
 from traverser.ui_functions.vixim_functions import await_run
 
 def start_it(start_thread, ui):
@@ -76,12 +77,27 @@ def toggle_yplus(ui):
         # Make sure no other motion buttons are active:
         for motion_button in motion_buttons:
             motion_button.setChecked(False)
-        # Send the go message:
+        # Stop the motor first:
         cmd_status, err_msg = await_run(ui, 'drive_stop', [y_motor])
-        cmd_status, err_msg = await_run(
-            ui, 'drive_go', [y_motor, 'f', ui.vixim.vel, ui.vixim.accel,
-            ui.vixim.decel]
-        )
+        # If motion type is constant:
+        if ui.motion_type == 'constant':
+            # Send the go message:
+            cmd_status, err_msg = await_run(
+                ui, 'drive_go', [y_motor, 'f', ui.vixim.vel, ui.vixim.accel,
+                ui.vixim.decel]
+            )
+        # Else, move specified distance:
+        else:
+            # Position and motor values:
+            y_pos = ui.vixim.status[y_motor]['pos']
+            # Convert units to motor position value:
+            dist_val = units_to_value(ui, ui.motion_dist, 'y')
+            # Go to new position:
+            cmd_status, err_msg = await_run(ui, 'drive_goto',
+                [y_motor, y_pos + dist_val, ui.vixim.vel, ui.vixim.accel,
+                 ui.vixim.decel]
+            )
+        # Log status:
         ui.log_message(err_msg, cmd_status)
         # If that failed, give up:
         if not cmd_status:
@@ -125,12 +141,27 @@ def toggle_yminus(ui):
         # Make sure no other motion buttons are active:
         for motion_button in motion_buttons:
             motion_button.setChecked(False)
-        # Send the go message:
+        # Stop the motor first:
         cmd_status, err_msg = await_run(ui, 'drive_stop', [y_motor])
-        cmd_status, err_msg = await_run(
-            ui, 'drive_go', [y_motor, 'b', ui.vixim.vel, ui.vixim.accel,
-            ui.vixim.decel]
-        )
+        # If motion type is constant:
+        if ui.motion_type == 'constant':
+            # Send the go message:
+            cmd_status, err_msg = await_run(
+                ui, 'drive_go', [y_motor, 'b', ui.vixim.vel, ui.vixim.accel,
+                ui.vixim.decel]
+            )
+        # Else, move specified distance:
+        else:
+            # Position and motor values:
+            y_pos = ui.vixim.status[y_motor]['pos']
+            # Convert units to motor position value:
+            dist_val = units_to_value(ui, ui.motion_dist, 'y')
+            # Go to new position:
+            cmd_status, err_msg = await_run(ui, 'drive_goto',
+                [y_motor, y_pos - dist_val, ui.vixim.vel, ui.vixim.accel,
+                 ui.vixim.decel]
+            )
+        # Log status:
         ui.log_message(err_msg, cmd_status)
         # If that failed, give up:
         if not cmd_status:
@@ -174,12 +205,27 @@ def toggle_xplus(ui):
         # Make sure no other motion buttons are active:
         for motion_button in motion_buttons:
             motion_button.setChecked(False)
-        # Send the go message:
+        # Stop the motor first:
         cmd_status, err_msg = await_run(ui, 'drive_stop', [x_motor])
-        cmd_status, err_msg = await_run(
-            ui, 'drive_go', [x_motor, 'f', ui.vixim.vel, ui.vixim.accel,
-            ui.vixim.decel]
-        )
+        # If motion type is constant:
+        if ui.motion_type == 'constant':
+            # Send the go message:
+            cmd_status, err_msg = await_run(
+                ui, 'drive_go', [x_motor, 'f', ui.vixim.vel, ui.vixim.accel,
+                ui.vixim.decel]
+            )
+        # Else, move specified distance:
+        else:
+            # Position and motor values:
+            x_pos = ui.vixim.status[x_motor]['pos']
+            # Convert units to motor position value:
+            dist_val = units_to_value(ui, ui.motion_dist, 'x')
+            # Go to new position:
+            cmd_status, err_msg = await_run(ui, 'drive_goto',
+                [x_motor, x_pos + dist_val, ui.vixim.vel, ui.vixim.accel,
+                 ui.vixim.decel]
+            )
+        # Log status:
         ui.log_message(err_msg, cmd_status)
         # If that failed, give up:
         if not cmd_status:
@@ -223,12 +269,27 @@ def toggle_xminus(ui):
         # Make sure no other motion buttons are active:
         for motion_button in motion_buttons:
             motion_button.setChecked(False)
-        # Send the go message:
+        # Stop the motor first:
         cmd_status, err_msg = await_run(ui, 'drive_stop', [x_motor])
-        cmd_status, err_msg = await_run(
-            ui, 'drive_go', [x_motor, 'b', ui.vixim.vel, ui.vixim.accel,
-            ui.vixim.decel]
-        )
+        # If motion type is constant:
+        if ui.motion_type == 'constant':
+            # Send the go message:
+            cmd_status, err_msg = await_run(
+                ui, 'drive_go', [x_motor, 'b', ui.vixim.vel, ui.vixim.accel,
+                ui.vixim.decel]
+            )
+        # Else, move specified distance:
+        else:
+            # Position and motor values:
+            x_pos = ui.vixim.status[x_motor]['pos']
+            # Convert units to motor position value:
+            dist_val = units_to_value(ui, ui.motion_dist, 'x')
+            # Go to new position:
+            cmd_status, err_msg = await_run(ui, 'drive_goto',
+                [x_motor, x_pos - dist_val, ui.vixim.vel, ui.vixim.accel,
+                 ui.vixim.decel]
+            )
+        # Log status:
         ui.log_message(err_msg, cmd_status)
         # If that failed, give up:
         if not cmd_status:

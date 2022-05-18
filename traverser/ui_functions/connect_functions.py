@@ -14,6 +14,7 @@ def toggle_connect_buttons(ui):
     connect_buttons = ['configure', 'start', 'prog_config',
                        'control_yplus', 'control_yminus', 'control_xplus',
                        'control_xminus', 'control_gh',
+                       'motion_type',
                        'vel', 'accel', 'decel']
     # Loop through buttons:
     for connect_button in connect_buttons:

@@ -27,6 +27,7 @@ from traverser.ui_components.instrument_area import InstrumentArea
 from traverser.ui_components.log_area import LogArea
 from traverser.ui_components.main_frame import MainFrame
 from traverser.ui_components.motion_control import MotionControl
+from traverser.ui_components.motion_type import MotionType
 from traverser.ui_components.motion_settings import MotionSettings
 from traverser.ui_components.program_control import ProgramControl
 from traverser.ui_components.program_window import ProgramWindow
@@ -38,6 +39,9 @@ from traverser.ui_functions.exit_functions import program_exit
 from traverser.ui_functions.instrument_functions import toggle_inst_connect
 from traverser.ui_functions.motion_control_functions import (
     toggle_yplus, toggle_yminus, toggle_xplus, toggle_xminus, toggle_gh
+)
+from traverser.ui_functions.motion_type_functions import (
+    toggle_motion_type, set_distance
 )
 from traverser.ui_functions.motion_settings_functions import set_motion
 from traverser.ui_functions.status_functions import plot_status, plot_program
@@ -98,6 +102,9 @@ class TraverserUI(QWidget):
             'x': None,
             'y': None
         }
+        # Motion type (constant / distance) and motion distance:
+        self.motion_type = 'constant'
+        self.motion_dist = 10
         # Flag to indicate program is exiting:
         self.exiting = 0
         # Instrument gets stored here:
@@ -264,6 +271,12 @@ class TraverserUI(QWidget):
         # Go home:
         button_control_gh = self.ui_buttons['control_gh']
         button_control_gh.clicked.connect(partial(toggle_gh, self))
+        # Motion type button:
+        button_motion_type = self.ui_buttons['motion_type']
+        button_motion_type.clicked.connect(partial(toggle_motion_type, self))
+        # Distance button:
+        button_dist = self.ui_buttons['dist']
+        button_dist.clicked.connect(partial(set_distance, self))
         # Velocity setting:
         button_vel = self.ui_buttons['vel']
         button_vel.clicked.connect(partial(set_motion, self, 'vel'))
@@ -401,14 +414,18 @@ class TraverserUI(QWidget):
         self.ui_components['motion_control'] = MotionControl(self)
         motion_control = self.ui_components['motion_control']
         column_a_grid.addWidget(motion_control, 1, 0, 1, 1)
+        # Motion type area:
+        self.ui_components['motion_type'] = MotionType(self)
+        motion_type = self.ui_components['motion_type']
+        column_a_grid.addWidget(motion_type, 2, 0, 1, 1)
         # Motion settings area:
         self.ui_components['motion_settings'] = MotionSettings(self)
         motion_settings = self.ui_components['motion_settings']
-        column_a_grid.addWidget(motion_settings, 2, 0, 1, 1)
+        column_a_grid.addWidget(motion_settings, 3, 0, 1, 1)
         # Program control:
         self.ui_components['program_control'] = ProgramControl(self)
         program_control = self.ui_components['program_control']
-        column_a_grid.addWidget(program_control, 3, 0, 1, 1)
+        column_a_grid.addWidget(program_control, 4, 0, 1, 1)
 
         # Second column ...
         self.ui_components['column_b'] = FrameColumn(self)
